@@ -1,4 +1,3 @@
-import os
 import cv2
 
 folders_path = ['photos/images', 'photos/uploads/processed']

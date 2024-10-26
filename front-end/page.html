@@ -7,63 +7,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Upload Your Images</h1>
+    <div class="container">
+        <h1>Upload Your Images</h1>
 
-    <div class="upload-container">
-        <input type="file" id="fileInput" multiple accept="image/*">
-        <button onclick="uploadImages()">Upload</button>
-        <p id="uploadSuccess">Images Uploaded Successfully!</p>
+        <div class="upload-container">
+            <input type="file" id="fileInput" multiple accept="image/*">
+            <label for="fileInput">Choose Images</label>
+            <button id="uploadButton">Upload</button>
+            <p id="uploadSuccess" style="display:none;">Images Uploaded Successfully!</p>
+            <p id="uploadError" class="error-message" style="display:none;"></p>
+            <div id="loading" class="loading" style="display: none;">Loading...</div>
+        </div>
+
+        <div class="image-preview" id="imagePreview"></div>
     </div>
 
-    <div class="image-preview" id="imagePreview"></div>
-
-    <script>
-        let selectedFiles = [];
-        const fileInput = document.getElementById('fileInput');
-        const imagePreview = document.getElementById('imagePreview');
-        const uploadSuccess = document.getElementById('uploadSuccess');
-
-        fileInput.addEventListener('change', (event) => {
-            const files = event.target.files;
-            selectedFiles = files;
-            imagePreview.innerHTML = '';
-            uploadSuccess.style.display = 'none';
-
-            for (const file of files) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    imagePreview.appendChild(img);
-                }
-
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Function to upload images to the server
-        function uploadImages() {
-          const formData = new FormData();
-          for (const file of selectedFiles)
-              formData.append('images', file);
-
-          fetch('http://127.0.0.1:8080/upload', {
-              method: 'POST',
-              body: formData
-          })
-          .then(response => response.blob())
-          .then(blob => {
-              const imageUrl = URL.createObjectURL(blob);
-              const imgElement = document.createElement('img');
-              imgElement.src = imageUrl;
-              document.body.appendChild(imgElement);
-              uploadSuccess.style.display = 'block';
-          })
-          .catch(error => {
-              console.error('Error uploading images:', error);
-          });
-      }
-
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
